@@ -134,7 +134,6 @@ class RequestService {
   static Future<WikiSearchResponse> query(String search) async {
     var response = await http.get("https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=$search&format=json&origin=*");
 
-    // Check if response is success
     if (response.statusCode >= 200 && response.statusCode < 300) {
       var map = json.decode(response.body);
       return WikiSearchResponse.fromJson(map);
