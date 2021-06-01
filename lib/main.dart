@@ -63,46 +63,41 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: searchTextController,
-                        obscureText: false,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Digite aqui o que você deseja Procurar.',
-                        ),
-                      ),
+              Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                Expanded(
+                  child: TextField(
+                    controller: searchTextController,
+                    obscureText: false,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Digite aqui o que você deseja Procurar.',
                     ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Container(
-                      height: 60,
-                      child: OutlineButton(
-                        onPressed: _search,
-                        highlightColor: Colors.lightBlue,
-                        child: Text("Pesquisa"),
-                      ),
-                    ),
-                  ]
-              ),
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  height: 60,
+                  child: OutlineButton(
+                    onPressed: _search,
+                    highlightColor: Colors.lightBlue,
+                    child: Text("Pesquisa"),
+                  ),
+                ),
+              ]),
               SizedBox(
                 height: 10,
               ),
-              Expanded(child:
-                SingleChildScrollView(
-                child: ListView.builder(
-                  primary: false,
-                  itemBuilder: (BuildContext context,
-                      int index) => new WikiSearchItemWidget(searchList[index]),
-                  itemCount: searchList.length,
-                  shrinkWrap: true,
+              Expanded(
+                child: SingleChildScrollView(
+                  child: ListView.builder(
+                    primary: false,
+                    itemBuilder: (BuildContext context, int index) => new WikiSearchItemWidget(searchList[index]),
+                    itemCount: searchList.length,
+                    shrinkWrap: true,
+                  ),
                 ),
-              ),
               ),
             ],
           ),
@@ -120,7 +115,8 @@ class WikiSearchItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(_entity.title,
+      title: Text(
+        _entity.title,
         style: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w700,
@@ -129,16 +125,15 @@ class WikiSearchItemWidget extends StatelessWidget {
       subtitle: SingleChildScrollView(
         child: Html(data: _entity.snippet),
       ),
-      onTap: () {
-
-      },
+      onTap: () {},
     );
   }
 }
 
 class RequestService {
   static Future<WikiSearchResponse> query(String search) async {
-    var response = await http.get("https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=$search&format=json&origin=*");
+    var response = await http.get("https://en.widdkipedia.org/w/api.php?action=query&list=search&srsearch=$search&format=json&origin=*");
+
     // Check if response is success
     if (response.statusCode >= 200 && response.statusCode < 300) {
       var map = json.decode(response.body);
@@ -155,10 +150,7 @@ class WikiSearchResponse {
   WikiQueryResponse query;
   WikiSearchResponse({this.batchComplete, this.query});
 
-  factory WikiSearchResponse.fromJson(Map<String, dynamic> json) => WikiSearchResponse(
-      batchComplete: json["batchcomplete"],
-      query: WikiQueryResponse.fromJson(json["query"])
-  );
+  factory WikiSearchResponse.fromJson(Map<String, dynamic> json) => WikiSearchResponse(batchComplete: json["batchcomplete"], query: WikiQueryResponse.fromJson(json["query"]));
 }
 
 class WikiQueryResponse {
@@ -168,12 +160,8 @@ class WikiQueryResponse {
 
   factory WikiQueryResponse.fromJson(Map<String, dynamic> json) {
     List<dynamic> resultList = json['search'];
-    List<WikiSearchEntity> search = resultList.map((dynamic value) =>
-        WikiSearchEntity.fromJson(value))
-        .toList(growable: false);
-    return WikiQueryResponse(
-        search: search
-    );
+    List<WikiSearchEntity> search = resultList.map((dynamic value) => WikiSearchEntity.fromJson(value)).toList(growable: false);
+    return WikiQueryResponse(search: search);
   }
 }
 
@@ -187,13 +175,5 @@ class WikiSearchEntity {
   String timestamp;
   WikiSearchEntity({this.ns, this.title, this.pageId, this.size, this.wordCount, this.snippet, this.timestamp});
 
-  factory WikiSearchEntity.fromJson(Map<String, dynamic> json) => WikiSearchEntity(
-    ns: json["ns"],
-    title: json["title"],
-    pageId: json["pageid"],
-    size: json["size"],
-    wordCount: json["wordcount"],
-    snippet: json["snippet"],
-    timestamp: json["timestamp"]
-  );
+  factory WikiSearchEntity.fromJson(Map<String, dynamic> json) => WikiSearchEntity(ns: json["ns"], title: json["title"], pageId: json["pageid"], size: json["size"], wordCount: json["wordcount"], snippet: json["snippet"], timestamp: json["timestamp"]);
 }
