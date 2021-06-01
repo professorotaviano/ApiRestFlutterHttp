@@ -132,7 +132,7 @@ class WikiSearchItemWidget extends StatelessWidget {
 
 class RequestService {
   static Future<WikiSearchResponse> query(String search) async {
-    var response = await http.get("https://en.wiakipedia.org/w/api.php?action=query&list=search&srsearch=$search&format=json&origin=*");
+    var response = await http.get("https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=$search&format=json&origin=*");
 
     // Check if response is success
     if (response.statusCode >= 200 && response.statusCode < 300) {
